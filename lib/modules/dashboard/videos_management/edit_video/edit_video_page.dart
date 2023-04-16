@@ -21,7 +21,7 @@ class EditVideoPage extends GetView<EditVideoController> {
         title: 'Edit Videos',
         leadingIcon: IconButton(
           onPressed: () {
-            Get.toNamed(Routes.listVideo);
+            Get.offNamed(Routes.listVideo);
           },
           icon: Icon(Icons.arrow_back_outlined, color: kcBlackColor,),
         ),

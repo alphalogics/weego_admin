@@ -19,7 +19,7 @@ class ViewNewsPage extends GetView<ViewNewsController> {
         title: 'View News',
         leadingIcon: IconButton(
           onPressed: () {
-            Get.toNamed(Routes.listNews);
+            Get.offNamed(Routes.listNews);
           },
           icon: Icon(
             Icons.arrow_back_outlined,

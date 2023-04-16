@@ -27,11 +27,13 @@ class ViewNewsController extends BaseController {
 
   @override
   void onReady() {
+    newsId = AppSharedPreferences.getSelectedNewsId()!;
     onGettingVideoDetail(newsId);
     super.onReady();
   }
 
   void onGettingVideoDetail(String newsId) {
+    newsId = AppSharedPreferences.getSelectedNewsId()!;
     executeRequestWithState<GetSingleNewsResponse>(
         state: viewNewsState,
         loaderMessage: 'Getting News Info...',

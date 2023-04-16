@@ -18,7 +18,7 @@ class ViewVideoPage extends GetView<ViewVideoController> {
         title: 'View Video',
         leadingIcon: IconButton(
           onPressed: () {
-            Get.toNamed(Routes.listVideo);
+            Get.offNamed(Routes.listVideo);
           },
           icon: Icon(
             Icons.arrow_back_outlined,

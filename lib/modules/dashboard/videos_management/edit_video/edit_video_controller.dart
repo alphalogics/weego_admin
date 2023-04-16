@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:weego_admin/core/shared_preference/app_shared_preference.dart';
 
 import '../../../../../../core/widgets/base/base_controller.dart';
@@ -7,13 +8,16 @@ import '../../../../core/models/requests/video_request.dart';
 import '../../../../core/models/responses/get_single_video_response.dart';
 import '../../../../core/models/responses/save_video_response.dart';
 import '../../../../core/repositories/videos_repository.dart';
+import '../../../../core/routings/app_route.dart';
+import '../../../../core/services/navigation_service.dart';
 import '../../../../core/utils/message_dialog.dart';
 import '../../../../core/utils/request_utils.dart';
 
 class EditVideoController extends BaseController {
 
   final VideosRepository _videosRepository;
-  EditVideoController(this._videosRepository);
+  final NavigationServices _navigationServices;
+  EditVideoController(this._videosRepository, this._navigationServices);
 
   var editVideoKey = GlobalKey<FormState>();
 
@@ -24,6 +28,8 @@ class EditVideoController extends BaseController {
   var editVideoState = BaseState<SaveVideoResponse>();
   var singleVideoState = BaseState<GetSingleVideoResponse>();
 
+  String videoId = AppSharedPreferences.getSelectedVideoId()!;
+
   @override
   void onInit() {
     // TODO: implement onInit
@@ -32,15 +38,17 @@ class EditVideoController extends BaseController {
 
   @override
   void onReady() {
-    onGettingVideoDetail('AppSharedPreferences.getSelectedVideoId()!');
+    videoId = AppSharedPreferences.getSelectedVideoId()!;
+    onGettingVideoDetail(videoId);
     super.onReady();
   }
 
   void onGettingVideoDetail(String videoId) {
+    videoId = AppSharedPreferences.getSelectedVideoId()!;
     executeRequestWithState<GetSingleVideoResponse>(
         state: singleVideoState,
         loaderMessage: 'Getting Video Info...',
-        future: _videosRepository.getVideo('6425ba2a4a988d2608df9e18'),
+        future: _videosRepository.getVideo(videoId),
         onSuccess: (res) {
           videoLinkController.text = res.result!.videoLink!;
           videoTitleController.text = res.result!.title!;
@@ -62,6 +70,8 @@ class EditVideoController extends BaseController {
 
   void editVideoData() {
 
+    videoId = AppSharedPreferences.getSelectedVideoId()!;
+
     VideoRequest request = VideoRequest(
         videoLink: videoLinkController.text.trim(),
         title: videoTitleController.text.trim(),
@@ -71,9 +81,10 @@ class EditVideoController extends BaseController {
     executeRequestWithState<SaveVideoResponse>(
         state: editVideoState,
         loaderMessage: 'Updating Video Info...',
-        future: _videosRepository.updateVideo('6425ba2a4a988d2608df9e18', request),
+        future: _videosRepository.updateVideo(videoId, request),
         onSuccess: (res) {
           showMessageDialog(mainMessage: '${res.message}', type: MessageDialogType.success);
+          _navigationServices.selectedVideoKey.refresh();
         },
         onFailed: (msg) {
           showMessageDialog(mainMessage: 'Something went wrong, Try Again', type: MessageDialogType.error);

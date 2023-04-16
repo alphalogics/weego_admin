@@ -121,8 +121,8 @@ class HomePage extends GetView<HomeController> {
             verticalSpaceSmall,
             AppInputField(
               controller: controller.coverDesController,
-              title: 'Description',
-              hintText: 'Enter description',
+              title: 'Button Link',
+              hintText: 'Enter button link',
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.done,
               validator: ValidationBuilder().required('This field is required').build(),

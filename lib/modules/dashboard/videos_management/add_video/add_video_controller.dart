@@ -4,13 +4,15 @@ import '../../../../core/api/base_state.dart';
 import '../../../../core/models/requests/video_request.dart';
 import '../../../../core/models/responses/save_video_response.dart';
 import '../../../../core/repositories/videos_repository.dart';
+import '../../../../core/services/navigation_service.dart';
 import '../../../../core/utils/message_dialog.dart';
 import '../../../../core/utils/request_utils.dart';
 
 class AddVideoController extends BaseController {
 
   final VideosRepository _videosRepository;
-  AddVideoController(this._videosRepository);
+  final NavigationServices _navigationServices;
+  AddVideoController(this._videosRepository, this._navigationServices);
 
   var addVideoKey = GlobalKey<FormState>();
 
@@ -56,6 +58,7 @@ class AddVideoController extends BaseController {
         videoLinkController.text = "";
         videoTitleController.text = "";
         videoDescriptionController.text = "";
+        _navigationServices.selectedVideoKey.refresh();
       },
       onFailed: (msg) {
         showMessageDialog(mainMessage: 'Something went wrong, Try Again', type: MessageDialogType.error);

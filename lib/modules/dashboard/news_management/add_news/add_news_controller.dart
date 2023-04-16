@@ -9,13 +9,15 @@ import '../../../../../core/widgets/base/base_controller.dart';
 import '../../../../core/api/base_state.dart';
 import '../../../../core/repositories/news_repository.dart';
 import '../../../../core/routings/app_route.dart';
+import '../../../../core/services/navigation_service.dart';
 import '../../../../core/utils/message_dialog.dart';
 import '../../../../core/utils/request_utils.dart';
 
 class AddNewsController extends BaseController {
 
   final NewsRepository _newsRepository;
-  AddNewsController(this._newsRepository);
+  final NavigationServices _navigationServices;
+  AddNewsController(this._newsRepository, this._navigationServices);
 
   var addNewsKey = GlobalKey<FormState>();
 
@@ -84,9 +86,9 @@ class AddNewsController extends BaseController {
       future: _newsRepository.addNews(data),
       onSuccess: (res) {
         print('Saving News Info: ${res.message}');
-        showMessageDialog(
-            mainMessage: '${res.message}', type: MessageDialogType.success);
-        Get.offNamed(Routes.listNews);
+        showMessageDialog(mainMessage: '${res.message}', type: MessageDialogType.success);
+        _navigationServices.selectedNewsKey.refresh();
+        // Get.offNamed(Routes.listNews);
       },
       onFailed: (msg) {
         print('Saving News Info: $msg');

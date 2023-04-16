@@ -8,6 +8,7 @@ import '../../../../core/models/responses/general_news_response.dart';
 import '../../../../core/models/responses/get_all_news_response.dart';
 import '../../../../core/repositories/news_repository.dart';
 import '../../../../core/routings/app_route.dart';
+import '../../../../core/services/navigation_service.dart';
 import '../../../../core/shared_preference/app_shared_preference.dart';
 import '../../../../core/utils/message_dialog.dart';
 import '../../../../core/utils/request_utils.dart';
@@ -15,7 +16,8 @@ import '../../../../core/utils/request_utils.dart';
 class ListNewsController extends BaseController {
 
   final NewsRepository _newsRepository;
-  ListNewsController(this._newsRepository);
+  final NavigationServices _navigationServices;
+  ListNewsController(this._newsRepository, this._navigationServices);
 
   var getAllNewsState = BaseState<GetAllNewsResponse>();
   var deleteNewsState = BaseState<GeneralNewsResponse>();
@@ -25,7 +27,15 @@ class ListNewsController extends BaseController {
   @override
   void onReady() {
     getAllNews();
+    initEventListeners();
     super.onReady();
+  }
+
+  void initEventListeners() {
+    _navigationServices.selectedNewsKey.listen((value) {
+      // searchTextController.text = '';
+      getAllNewsUpdate();
+    });
   }
 
   void getAllNews() {
@@ -41,6 +51,22 @@ class ListNewsController extends BaseController {
             mainMessage: 'Something went wrong, Try Again',
             type: MessageDialogType.error);
       }
+    );
+  }
+
+  void getAllNewsUpdate() {
+    executeRequestWithState<GetAllNewsResponse>(
+        state: getAllNewsState,
+        // loaderMessage: 'Getting News...',
+        future: _newsRepository.getAllNews(),
+        onSuccess: (res) {
+          allNews.value = res;
+        },
+        onFailed: (msg) {
+          showMessageDialog(
+              mainMessage: 'Something went wrong, Try Again',
+              type: MessageDialogType.error);
+        }
     );
   }
 
