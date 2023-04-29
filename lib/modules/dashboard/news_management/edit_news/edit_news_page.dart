@@ -18,7 +18,6 @@ class EditNewsPage extends GetView<EditNewsController> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      shouldIncludeScrolling: false,
       appBar: BaseAppBar(
         title: 'Edit News',
         leadingIcon: IconButton(

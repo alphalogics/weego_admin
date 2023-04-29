@@ -19,7 +19,6 @@ class AddNewsPage extends GetView<AddNewsController> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
-      shouldIncludeScrolling: false,
       appBar: BaseAppBar(
         title: 'Add News',
         leadingIcon: IconButton(

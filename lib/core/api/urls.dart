@@ -1,6 +1,6 @@
 class URLs {
 
-  static const baseUrl = 'http://ilaayn.com/api';
+  static const baseUrl = 'https://ilaayn.com/api';
 
   static const login = '/user/sign-in';
   static const changePassword = '/user/change-password';
